@@ -44,6 +44,21 @@ public class Book {
         this.description = description;
     }
 
+    public Book() {
+    }
+
+    public Book(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    public Book(String name, String author, String description) {
+        this.name = name;
+        this.author = author;
+        this.description = description;
+    }
+
+
     @Override
     public String toString() {
         return "Book{" +

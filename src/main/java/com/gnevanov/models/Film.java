@@ -53,14 +53,24 @@ public class Film {
         this.year = year;
     }
 
+    public Film() {
+    }
+
+    public Film(String name, String description, String producer, short year) {
+        this.name = name;
+        this.description = description;
+        this.producer = producer;
+        this.year = year;
+    }
+
     @Override
     public String toString() {
         return "Film{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", year=" + year + '\'' +
                 ", description='" + description + '\'' +
-                ", producer='" + producer + '\'' +
-                ", year=" + year +
+                ", producer='" + producer +
                 '}';
     }
 }
