@@ -1,6 +1,7 @@
 package com.gnevanov.dao;
 
 import com.gnevanov.models.Book;
+import com.gnevanov.utilities.BookMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -34,11 +35,15 @@ public class BookDAOImpl implements BookDAO{
     }
 
     public List<Book> getAllBooks() {
-        return null;//jdbcTemplate.query("SELECT * FROM BOOKS",);
+        String sql = "SELECT * FROM BOOKS";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        return jdbcTemplate.query(sql, new BookMapper());
     }
 
     public Book getBookById(int id) {
-        return null;
+        String sql = "SELECT * FROM BOOKS WHERE ID = ?";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        return (Book) jdbcTemplate.queryForObject(sql, new Object[]{id}, new BookMapper());
     }
 
     public List<Book> getBooksByName(String name) {
