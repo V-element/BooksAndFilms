@@ -22,10 +22,11 @@ public class AppController {
     FilmDAO filmDAO;
 
     @GetMapping("/books")
-    public String allBooks(Model model) {
-        List<Book> bookList = bookDAO.getAllBooks();
-        model.addAttribute("books", bookDAO.getAllBooks());
-        return "books";
+    public List<Book> allBooks(Model model) {
+        //List<Book> bookList = bookDAO.getAllBooks();
+        //model.addAttribute("books", bookDAO.getAllBooks());
+        //return "books";
+        return bookDAO.getAllBooks();
     }
 
     @GetMapping("/books/add")
