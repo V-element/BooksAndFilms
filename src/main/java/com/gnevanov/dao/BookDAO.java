@@ -7,7 +7,7 @@ import java.util.List;
 public interface BookDAO {
     void setDataSource(DataSource dataSource);
     void add(Book book);
-    void delete(Book book);
+    void delete(int id);
     Book getBookById(int id);
     List<Book> getAllBooks();
     List<Book> getBooksByName(String name);

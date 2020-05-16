@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -22,16 +23,16 @@ public class BookDAOImpl implements BookDAO{
     public void add(Book book) {
         String sql = "INSERT INTO BOOKS(ID,NAME,AUTHOR,DESCRIPTION) VALUES (?,?,?,?)";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update(sql, new Object[]{book.getId(),
-                                                book.getName(),
-                                                book.getAuthor(),
-                                                book.getDescription()});
+        jdbcTemplate.update(sql, book.getId(),
+                                    book.getName(),
+                                    book.getAuthor(),
+                                    book.getDescription());
     }
 
-    public void delete(Book book) {
+    public void delete(int id) {
         String sql = "DELETE FROM BOOKS WHERE ID = ?";
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        jdbcTemplate.update(sql, book.getId());
+        jdbcTemplate.update(sql, id);
     }
 
     public List<Book> getAllBooks() {
@@ -47,14 +48,35 @@ public class BookDAOImpl implements BookDAO{
     }
 
     public List<Book> getBooksByName(String name) {
-        return null;
+        String sql = "SELECT * FROM BOOKS WHERE NAME = ?";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        List list = jdbcTemplate.queryForList(sql, new Object[]{name}, new BookMapper());
+        List<Book> bookList = new ArrayList<Book>();
+        for (Object obj: list) {
+            bookList.add((Book) obj);
+        }
+        return bookList;
     }
 
     public List<Book> getBooksByAuthor(String author) {
-        return null;
+        String sql = "SELECT * FROM BOOKS WHERE AUTHOR = ?";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        List list = jdbcTemplate.queryForList(sql, new Object[]{author}, new BookMapper());
+        List<Book> bookList = new ArrayList<Book>();
+        for (Object obj: list) {
+            bookList.add((Book) obj);
+        }
+        return bookList;
     }
 
     public List<Book> getBooksByNameAndAuthor(String name, String author) {
-        return null;
+        String sql = "SELECT * FROM BOOKS WHERE NAME = ? AND AUTHOR = ?";
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
+        List list = jdbcTemplate.queryForList(sql, new Object[]{name, author}, new BookMapper());
+        List<Book> bookList = new ArrayList<Book>();
+        for (Object obj: list) {
+            bookList.add((Book) obj);
+        }
+        return bookList;
     }
 }
