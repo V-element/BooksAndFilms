@@ -1,6 +1,7 @@
 package com.gnevanov.controllers;
 
 import com.gnevanov.dao.BookDAO;
+import com.gnevanov.dao.BookDAOImpl;
 import com.gnevanov.dao.FilmDAO;
 import com.gnevanov.models.Book;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,9 @@ import java.util.List;
 public class AppController {
 
     @Autowired
-    BookDAO bookDAO;
-    @Autowired
-    FilmDAO filmDAO;
+    private BookDAO bookDAO;
+    //@Autowired
+    //FilmDAO filmDAO;
 
     @GetMapping("/books")
     public List<Book> allBooks(Model model) {
