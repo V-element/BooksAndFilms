@@ -52,6 +52,11 @@
             <version>4.0.1</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>9.0.33</version>
+        </dependency>
     </dependencies>
 
 </project>
