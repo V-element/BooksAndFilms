@@ -1,8 +1,11 @@
 package com.gnevanov.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -13,7 +16,15 @@ import org.apache.tomcat.jdbc.pool.DataSource;
 @Configuration
 @EnableWebMvc
 @ComponentScan(basePackages = "com.gnevanov")
+@PropertySource(value = "classpath:application.properties")
 public class WebMvcConfig implements WebMvcConfigurer {
+    private Environment environment;
+
+    @Autowired
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+
     @Bean
     public InternalResourceViewResolver getViewResolver() {
         InternalResourceViewResolver viewResolver = new InternalResourceViewResolver();
@@ -26,9 +37,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Bean
     public DataSource dataSource() {
         DataSource dataSource = new DataSource();
-        dataSource.setUrl("jdbc:mysql://localhost:3306/spring_test_base?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true");
-        dataSource.setUsername("root");
-        dataSource.setPassword("root");
+        dataSource.setDriverClassName(environment.getRequiredProperty("jdbc.driverClassName"));
+        dataSource.setUrl(environment.getRequiredProperty("jdbc.url"));
+        dataSource.setUsername(environment.getRequiredProperty("jdbc.username"));
+        dataSource.setPassword(environment.getRequiredProperty("jdbc.password"));
         return dataSource;
     }
 
