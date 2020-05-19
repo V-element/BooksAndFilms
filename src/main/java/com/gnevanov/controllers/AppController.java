@@ -1,7 +1,6 @@
 package com.gnevanov.controllers;
 
 import com.gnevanov.dao.BookDAO;
-import com.gnevanov.dao.BookDAOImpl;
 import com.gnevanov.dao.FilmDAO;
 import com.gnevanov.models.Book;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,14 +19,14 @@ public class AppController {
     @Autowired
     private BookDAO bookDAO;
     //@Autowired
-    //FilmDAO filmDAO;
+    //private FilmDAO filmDAO;
 
     @GetMapping("/books")
-    public List<Book> allBooks(Model model) {
-        //List<Book> bookList = bookDAO.getAllBooks();
-        //model.addAttribute("books", bookDAO.getAllBooks());
-        //return "books";
-        return bookDAO.getAllBooks();
+    public String allBooks(Model model) {
+        List<Book> bookList = bookDAO.getAllBooks();
+        model.addAttribute("title", "BOOKS");
+        model.addAttribute("books", bookDAO.getAllBooks());
+        return "books";
     }
 
     @GetMapping("/books/add")
@@ -42,7 +41,7 @@ public class AppController {
         return "redirect:/books";
     }
 
-    @PostMapping("/books/{id}/delete")
+    @GetMapping("/books/delete/{id}")
     public String deleteBook(@PathVariable(value = "id") int id, Model model) {
         bookDAO.delete(id);
         return "redirect:/books";
