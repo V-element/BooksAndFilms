@@ -13,7 +13,13 @@
     <link href="<c:url value="/resources/style.css"/>" rel="stylesheet" type="text/css"/>
 </head>
 <body>
+<a href="/">Back to homepage</a>
 <h2>Books</h2>
+<form action="/books/search" method="GET">
+    <p><input type="search" name="name" placeholder="Name">
+        <input type="search" name="author" placeholder="Author">
+    <input type="submit" value="Search!"></p>
+</form>
 <table>
     <tr>
         <th>Author</th>
@@ -27,11 +33,19 @@
             <td>${book.name}</td>
             <td>${book.description}</td>
             <td>
-                <a href="books/edit/${book.id}">edit</a>
-                <a href="books/delete/${book.id}">delete</a>
+                <a href="books/edit?id=${book.id}">edit</a>
+                <a href="books/delete?id=${book.id}">delete</a>
             </td>
         </tr>
     </c:forEach>
+
+    <c:if test="${booksCount == 0}">
+        <tr>
+            <td colspan="4">
+                The list is empty but you can add a new Book!
+            </td>
+        </tr>
+    </c:if>
 
     <tr>
         <c:url value="/books/add" var="add"/>

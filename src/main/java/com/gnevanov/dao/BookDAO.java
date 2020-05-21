@@ -5,8 +5,8 @@ import javax.sql.DataSource;
 import java.util.List;
 
 public interface BookDAO {
-    void setDataSource(DataSource dataSource);
     void add(Book book);
+    void update(Book book);
     void delete(int id);
     Book getBookById(int id);
     List<Book> getAllBooks();
