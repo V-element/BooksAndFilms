@@ -1,3 +1,5 @@
+use schema_baf;
+
 INSERT INTO schema_baf.books
 (name,author,description)
 VALUES

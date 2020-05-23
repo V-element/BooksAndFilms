@@ -34,17 +34,17 @@ public class AppController {
     }
 
     @PostMapping("/books/add")
-    public String addBook(@RequestParam int id, @RequestParam String name, @RequestParam String author, @RequestParam String description, Model model) {
-        Book book = new Book(id, name, author, description);
+    public String addBook(@RequestParam String name, @RequestParam String author, @RequestParam String description, Model model) {
+        Book book = new Book(name, author, description);
         bookDAO.add(book);
         return "redirect:/books";
     }
 
-    @GetMapping(value = "/books/edit?id={id}")
-    public String editPage(@PathVariable("id") int id, Model model) {
-        Book book = bookDAO.getBookById(id);
-        model.addAttribute(book);
-        return "book-add-edit";
+    @GetMapping(value = "/books/edit")
+    public ModelAndView editBook(@RequestParam("id") int id, Model model) {
+        ModelAndView modelAndView = new ModelAndView("book-add-edit");
+        modelAndView.addObject(bookDAO.getBookById(id));
+        return modelAndView;
     }
 
     @PostMapping(value = "/books/edit")
@@ -53,22 +53,43 @@ public class AppController {
         return "redirect:/books";
     }
 
-    @GetMapping("/books/delete?={id}")
-    public String deleteBook(@PathVariable(value = "id") int id, Model model) {
+    @GetMapping("/books/delete")
+    public String deleteBook(@RequestParam(value = "id") int id, Model model) {
         bookDAO.delete(id);
         return "redirect:/books";
     }
 
-    @GetMapping("/books/search?name={name}")
-    public String searchByName(@PathVariable(value = "name") String name, Model model) {
-        List<Book> bookList = bookDAO.getBooksByName(name);
+    @GetMapping("/books/search")
+    public String searchByParams(@RequestParam(value = "name") String name, @RequestParam(value = "author") String author, Model model) {
+        List<Book> bookList;
+        if (name.isEmpty() & author.isEmpty()) {
+            bookList = bookDAO.getAllBooks();
+        } else if (!name.isEmpty() & author.isEmpty()) {
+            bookList = bookDAO.getBooksByName("%" + name + "%");
+        } else if (name.isEmpty() & !author.isEmpty()) {
+            bookList = bookDAO.getBooksByAuthor("%" + author + "%");
+        } else {
+            bookList = bookDAO.getBooksByNameAndAuthor("%" + name + "%", "%" + author + "%");
+        }
+        //List<Book> bookList = bookDAO.getBooksByName(name);
         model.addAttribute("title", "Books");
+        model.addAttribute("name", name);
+        model.addAttribute("author", author);
         model.addAttribute("books", bookList);
         model.addAttribute("booksCount", bookList.size());
         return "books";
     }
 
-    @GetMapping("/books/search?author={author}")
+   /* @GetMapping("/books/search")
+    public String searchByName(@RequestParam(value = "name") String name, Model model) {
+        List<Book> bookList = bookDAO.getBooksByName(name);
+        model.addAttribute("title", "Books");
+        model.addAttribute("books", bookList);
+        model.addAttribute("booksCount", bookList.size());
+        return "books";
+    }*/
+
+    /*@GetMapping("/books/search?author={author}")
     public String searchByAuthor(@PathVariable(value = "author") String author, Model model) {
         List<Book> bookList = bookDAO.getBooksByAuthor(author);
         model.addAttribute("title", "Books");
@@ -84,7 +105,7 @@ public class AppController {
         model.addAttribute("books", bookList);
         model.addAttribute("booksCount", bookList.size());
         return "books";
-    }
+    }*/
 
 
 }

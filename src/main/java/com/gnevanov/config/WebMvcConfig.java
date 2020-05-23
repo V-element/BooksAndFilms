@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -18,6 +19,7 @@ import org.apache.tomcat.jdbc.pool.DataSource;
 @EnableWebMvc
 @ComponentScan(basePackages = "com.gnevanov")
 @PropertySource(value = "classpath:application.properties")
+@EnableScheduling
 public class WebMvcConfig implements WebMvcConfigurer {
     private Environment environment;
 

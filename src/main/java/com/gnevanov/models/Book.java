@@ -52,8 +52,7 @@ public class Book {
         this.description = description;
     }
 
-    public Book(int id, String name, String author, String description) {
-        this.id = id;
+    public Book(String name, String author, String description) {
         this.name = name;
         this.author = author;
         this.description = description;

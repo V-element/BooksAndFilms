@@ -1,7 +1,6 @@
 package com.gnevanov.dao;
 
 import com.gnevanov.models.Book;
-import javax.sql.DataSource;
 import java.util.List;
 
 public interface BookDAO {

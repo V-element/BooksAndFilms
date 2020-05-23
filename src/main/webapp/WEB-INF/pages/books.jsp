@@ -16,8 +16,8 @@
 <a href="/">Back to homepage</a>
 <h2>Books</h2>
 <form action="/books/search" method="GET">
-    <p><input type="search" name="name" placeholder="Name">
-        <input type="search" name="author" placeholder="Author">
+    <p><input type="search" name="name" placeholder="Name" value="${name}">
+        <input type="search" name="author" placeholder="Author" value="${author}">
     <input type="submit" value="Search!"></p>
 </form>
 <table>
@@ -33,8 +33,8 @@
             <td>${book.name}</td>
             <td>${book.description}</td>
             <td>
-                <a href="books/edit?id=${book.id}">edit</a>
-                <a href="books/delete?id=${book.id}">delete</a>
+                <a href="/books/edit?id=${book.id}">edit</a>
+                <a href="/books/delete?id=${book.id}">delete</a>
             </td>
         </tr>
     </c:forEach>
