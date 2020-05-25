@@ -15,17 +15,11 @@ import java.util.Map;
 public class BookDAOImpl implements BookDAO{
 
     private DataSource dataSource;
-    //private JdbcTemplate jdbcTemplate;
 
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
     }
-
-    /*@Autowired
-    public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
-    }*/
 
     public void add(Book book) {
         String sql = "INSERT INTO schema_baf.books(id,name,author,description) VALUES (?,?,?,?)";
@@ -66,47 +60,16 @@ public class BookDAOImpl implements BookDAO{
 
     public List<Book> getBooksByName(String name) {
         String sql = "SELECT * FROM schema_baf.books WHERE name LIKE ?";
-
         return getListOfBooksByParams(sql, new Object[]{name});
-
-        /*JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        List<Book> bookList = new ArrayList<Book>();
-        List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, name);
-        for (Map row: rows) {
-            Book book = new Book();
-            book.setId((int)row.get("id"));
-            book.setName((String)row.get("name"));
-            book.setAuthor((String)row.get("author"));
-            book.setDescription((String)row.get("description"));
-            bookList.add(book);
-        }
-
-        return bookList;*/
     }
 
     public List<Book> getBooksByAuthor(String author) {
         String sql = "SELECT * FROM schema_baf.books WHERE author LIKE ?";
-        /*JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        List list = jdbcTemplate.queryForList(sql, new Object[]{author}, new BookMapper());
-        List<Book> bookList = new ArrayList<Book>();
-        for (Object obj: list) {
-            bookList.add((Book) obj);
-        }
-        return bookList;*/
-
         return getListOfBooksByParams(sql, new Object[]{author});
     }
 
     public List<Book> getBooksByNameAndAuthor(String name, String author) {
         String sql = "SELECT * FROM schema_baf.books WHERE name LIKE ? AND author LIKE ?";
-        /*JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
-        List list = jdbcTemplate.queryForList(sql, new Object[]{name, author}, new BookMapper());
-        List<Book> bookList = new ArrayList<Book>();
-        for (Object obj: list) {
-            bookList.add((Book) obj);
-        }
-        return bookList;*/
-
         return getListOfBooksByParams(sql, new Object[]{name, author});
     }
 

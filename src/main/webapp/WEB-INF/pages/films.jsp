@@ -1,8 +1,8 @@
 <%--
   Created by IntelliJ IDEA.
   User: Nataly
-  Date: 19.05.2020
-  Time: 23:31
+  Date: 26.05.2020
+  Time: 0:36
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
@@ -15,44 +15,46 @@
 <body>
 <a href="/">Back to homepage</a>
 <h2>${title}</h2>
-<form action="/books/search" method="GET">
+<form action="/films/search" method="GET">
     <p><input type="search" name="name" placeholder="Name" value="${name}">
-        <input type="search" name="author" placeholder="Author" value="${author}">
-    <input type="submit" value="Search!"></p>
+        <input type="search" name="year" placeholder="Year" value="${year}">
+        <input type="submit" value="Search!"></p>
 </form>
 <table>
     <tr>
-        <th>Author</th>
         <th>Name</th>
         <th>Description</th>
+        <th>Producer</th>
+        <th>Year</th>
         <th>Action</th>
     </tr>
-    <c:forEach var="book" items="${books}">
+    <c:forEach var="film" items="${films}">
         <tr>
-            <td>${book.author}</td>
-            <td>${book.name}</td>
-            <td>${book.description}</td>
+            <td>${film.name}</td>
+            <td>${film.description}</td>
+            <td>${film.producer}</td>
+            <td>${film.year}</td>
+
             <td>
-                <a href="/books/edit?id=${book.id}">edit</a>
-                <a href="/books/delete?id=${book.id}">delete</a>
+                <a href="/films/edit?id=${film.id}">edit</a>
+                <a href="/films/delete?id=${film.id}">delete</a>
             </td>
         </tr>
     </c:forEach>
 
-    <c:if test="${booksCount == 0}">
+    <c:if test="${filmsCount == 0}">
         <tr>
             <td colspan="4">
-                The list is empty but you can add a new Book!
+                The list is empty but you can add a new Film!
             </td>
         </tr>
     </c:if>
 
     <tr>
-        <c:url value="/books/add" var="add"/>
-        <td colspan="4"><a href="${add}">Add new book</a></td>
+        <c:url value="/films/add" var="add"/>
+        <td colspan="4"><a href="${add}">Add new film</a></td>
     </tr>
 </table>
 
 </body>
 </html>
-

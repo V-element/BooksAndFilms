@@ -3,15 +3,14 @@ package com.gnevanov.tasks;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import com.gnevanov.dao.BookDAO;
+import com.gnevanov.dao.FilmDAO;
 import com.gnevanov.models.Book;
+import com.gnevanov.models.Film;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -21,51 +20,53 @@ public class ScheduledTasks {
 
     @Autowired
     private BookDAO bookDAO;
+    @Autowired
+    private FilmDAO filmDAO;
 
     @Scheduled(fixedRate = 6000, initialDelay = 1000)
     public void exportDataToJSON() {
         ObjectMapper objectMapper = new ObjectMapper();
         List<Book> bookList = bookDAO.getAllBooks();
+        List<Film> filmList = filmDAO.getAllFilms();
         try {
-            String jsonText = objectMapper.writeValueAsString(bookList);
-            Files.writeString(Paths.get("C:/temp/books.json"), jsonText);
+            Files.writeString(Paths.get("C:/temp/books.json"), objectMapper.writeValueAsString(bookList));
+            Files.writeString(Paths.get("C:/temp/films.json"), objectMapper.writeValueAsString(filmList));
         } catch (IOException e) {
 
         }
-        /*for (Book book: bookList) {
-            try {
-                objectMapper.writeValue(file, book);
-            } catch (IOException e) {
-            }
-        }*/
     }
 
     @Scheduled(fixedRate = 10000, initialDelay = 2000)
     public void exportDataToXML() {
-        XmlMapper xmlMapper = new XmlMapper();
         List<Book> bookList = bookDAO.getAllBooks();
-        try {
-            //String xmlText = xmlMapper.writeValueAsString(bookList);
-            FileOutputStream fos = new FileOutputStream("C:/temp/books.xml");
-            ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        writeListToXML("books", bookList);
+        List<Film> filmList = filmDAO.getAllFilms();
+        writeListToXML("films", filmList);
+
+        /*File xmlOutput = new File("C:/temp/books.xml");
+        try (FileWriter fileWriter = new FileWriter(xmlOutput)) {
             for (Book book: bookList) {
-                oos.writeObject(xmlMapper.writeValueAsString(book));
-                //oos.flush();
+                fileWriter.write(xmlMapper.writeValueAsString(book));
             }
-            //oos.writeObject(ts);
-            oos.flush();
-            oos.close();
-            //Files.writeString(Paths.get("C:/temp/books.xml"), xmlText);
+        } catch (IOException e) {
+
+        }*/
+
+    }
+
+    private void writeListToXML(String fileName, List list) {
+
+        XmlMapper xmlMapper = new XmlMapper();
+        File xmlOutput = new File("C:/temp/" + fileName + ".xml");
+        try (FileWriter fileWriter = new FileWriter(xmlOutput)) {
+            for (Object object: list) {
+                if (fileName.equals("books")) {
+                    fileWriter.write(xmlMapper.writeValueAsString((Book) object));
+                }
+
+            }
         } catch (IOException e) {
 
         }
-        /*for (Book book: bookList) {
-            try {
-                xmlMapper.writeValue(file, book);
-            } catch (IOException e) {
-            }
-        }*/
-
     }
 }

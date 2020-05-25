@@ -1,7 +1,9 @@
 package com.gnevanov.controllers;
 
 import com.gnevanov.dao.BookDAO;
+import com.gnevanov.dao.FilmDAO;
 import com.gnevanov.models.Book;
+import com.gnevanov.models.Film;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +17,8 @@ public class AppController {
 
     @Autowired
     private BookDAO bookDAO;
-    //@Autowired
-    //private FilmDAO filmDAO;
+    @Autowired
+    private FilmDAO filmDAO;
 
     @GetMapping("/books")
     public String allBooks(Model model) {
@@ -66,12 +68,11 @@ public class AppController {
             bookList = bookDAO.getAllBooks();
         } else if (!name.isEmpty() & author.isEmpty()) {
             bookList = bookDAO.getBooksByName("%" + name + "%");
-        } else if (name.isEmpty() & !author.isEmpty()) {
+        } else if (name.isEmpty()) {
             bookList = bookDAO.getBooksByAuthor("%" + author + "%");
         } else {
             bookList = bookDAO.getBooksByNameAndAuthor("%" + name + "%", "%" + author + "%");
         }
-        //List<Book> bookList = bookDAO.getBooksByName(name);
         model.addAttribute("title", "Books");
         model.addAttribute("name", name);
         model.addAttribute("author", author);
@@ -80,32 +81,68 @@ public class AppController {
         return "books";
     }
 
-   /* @GetMapping("/books/search")
-    public String searchByName(@RequestParam(value = "name") String name, Model model) {
-        List<Book> bookList = bookDAO.getBooksByName(name);
-        model.addAttribute("title", "Books");
-        model.addAttribute("books", bookList);
-        model.addAttribute("booksCount", bookList.size());
-        return "books";
-    }*/
-
-    /*@GetMapping("/books/search?author={author}")
-    public String searchByAuthor(@PathVariable(value = "author") String author, Model model) {
-        List<Book> bookList = bookDAO.getBooksByAuthor(author);
-        model.addAttribute("title", "Books");
-        model.addAttribute("books", bookList);
-        model.addAttribute("booksCount", bookList.size());
-        return "books";
+    @GetMapping("/films")
+    public String allFilms(Model model) {
+        List<Film> filmList = filmDAO.getAllFilms();
+        model.addAttribute("title", "Films");
+        model.addAttribute("films", filmList);
+        model.addAttribute("filmsCount", filmList.size());
+        return "films";
     }
 
-    @GetMapping("/books/search?name={name}&author={author}")
-    public String searchByNameAndAuthor(@PathVariable(value = "name") String name, @PathVariable(value = "author") String author, Model model) {
-        List<Book> bookList = bookDAO.getBooksByNameAndAuthor(name, author);
-        model.addAttribute("title", "Books");
-        model.addAttribute("books", bookList);
-        model.addAttribute("booksCount", bookList.size());
-        return "books";
-    }*/
+    @GetMapping("/films/add")
+    public String addFilm(Model model) {
+        model.addAttribute("title", "Adding a new film");
+        return "film-add-edit";
+    }
 
+    @PostMapping("/films/add")
+    public String addFilm(@RequestParam String name,
+                          @RequestParam String description,
+                          @RequestParam String producer,
+                          @RequestParam short year,
+                          Model model) {
+        Film film = new Film(name,description, producer, year);
+        filmDAO.add(film);
+        return "redirect:/films";
+    }
 
+    @GetMapping(value = "/films/edit")
+    public ModelAndView editFilm(@RequestParam("id") int id, Model model) {
+        ModelAndView modelAndView = new ModelAndView("film-add-edit");
+        modelAndView.addObject(filmDAO.getFilmById(id));
+        return modelAndView;
+    }
+
+    @PostMapping(value = "/films/edit")
+    public String editFilm(@ModelAttribute("film") Film film) {
+        filmDAO.update(film);
+        return "redirect:/films";
+    }
+
+    @GetMapping("/films/delete")
+    public String deleteFilm(@RequestParam(value = "id") int id, Model model) {
+        filmDAO.delete(id);
+        return "redirect:/films";
+    }
+
+    @GetMapping("/films/search")
+    public String searchByParams(@RequestParam(value = "name") String name, @RequestParam(value = "year") short year, Model model) {
+        List<Film> filmList;
+        if (name.isEmpty() & year == 0) {
+            filmList = filmDAO.getAllFilms();
+        } else if (!name.isEmpty() & year == 0) {
+            filmList = filmDAO.getFilmsByName("%" + name + "%");
+        } else if (name.isEmpty()) {
+            filmList = filmDAO.getFilmsByYear(year);
+        }   else {
+            filmList = filmDAO.getFilmsByNameAndYear("%" + name + "%", year);
+        }
+        model.addAttribute("title", "Films");
+        model.addAttribute("name", name);
+        model.addAttribute("year", year);
+        model.addAttribute("films", filmList);
+        model.addAttribute("filmsCount", filmList.size());
+        return "films";
+    }
 }
