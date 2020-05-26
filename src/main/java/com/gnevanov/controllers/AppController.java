@@ -57,7 +57,9 @@ public class AppController {
 
     @GetMapping("/books/delete")
     public String deleteBook(@RequestParam(value = "id") int id, Model model) {
-        bookDAO.delete(id);
+        Book book = new Book();
+        book.setId(id);
+        bookDAO.delete(book);
         return "redirect:/books";
     }
 

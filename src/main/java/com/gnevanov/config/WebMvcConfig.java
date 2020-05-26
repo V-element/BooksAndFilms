@@ -13,6 +13,7 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.apache.tomcat.jdbc.pool.DataSource;
 
 @Configuration
@@ -56,6 +57,15 @@ public class WebMvcConfig implements WebMvcConfigurer {
         JdbcTemplate jdbcTemplate = new JdbcTemplate();
         jdbcTemplate.setDataSource(dataSource());
         return jdbcTemplate;
+    }
+
+    @Bean
+    public LocalSessionFactoryBean sessionFactory() {
+        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
+        sessionFactory.setDataSource(dataSource());
+        sessionFactory.setPackagesToScan("com.gnevanov.models");
+        //sessionFactory.setHibernateProperties(hibernateProperties());
+        return sessionFactory;
     }
 
 }
