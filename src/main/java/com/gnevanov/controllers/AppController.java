@@ -100,7 +100,7 @@ public class AppController {
     public String addFilm(@RequestParam String name,
                           @RequestParam String description,
                           @RequestParam String producer,
-                          @RequestParam short year,
+                          @RequestParam int year,
                           Model model) {
         Film film = new Film(name,description, producer, year);
         filmDAO.add(film);
@@ -127,7 +127,7 @@ public class AppController {
     }
 
     @GetMapping("/films/search")
-    public String searchByParams(@RequestParam(value = "name") String name, @RequestParam(value = "year") short year, Model model) {
+    public String searchByParams(@RequestParam(value = "name") String name, @RequestParam(value = "year") int year, Model model) {
         List<Film> filmList;
         if (name.isEmpty() & year == 0) {
             filmList = filmDAO.getAllFilms();

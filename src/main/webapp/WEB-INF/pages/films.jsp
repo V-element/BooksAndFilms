@@ -44,7 +44,7 @@
 
     <c:if test="${filmsCount == 0}">
         <tr>
-            <td colspan="4">
+            <td colspan="5">
                 The list is empty but you can add a new Film!
             </td>
         </tr>
@@ -52,7 +52,7 @@
 
     <tr>
         <c:url value="/films/add" var="add"/>
-        <td colspan="4"><a href="${add}">Add new film</a></td>
+        <td colspan="5"><a href="${add}">Add new film</a></td>
     </tr>
 </table>
 

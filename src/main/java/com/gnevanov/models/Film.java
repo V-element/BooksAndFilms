@@ -11,7 +11,7 @@ public class Film {
     private int id;
 
     private String name, description, producer;
-    private short year;
+    private int year;
 
     public int getId() {
         return id;
@@ -45,18 +45,18 @@ public class Film {
         this.producer = producer;
     }
 
-    public short getYear() {
+    public int getYear() {
         return year;
     }
 
-    public void setYear(short year) {
+    public void setYear(int year) {
         this.year = year;
     }
 
     public Film() {
     }
 
-    public Film(String name, String description, String producer, short year) {
+    public Film(String name, String description, String producer, int year) {
         this.name = name;
         this.description = description;
         this.producer = producer;

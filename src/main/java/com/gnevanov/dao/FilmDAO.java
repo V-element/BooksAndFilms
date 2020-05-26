@@ -11,6 +11,6 @@ public interface FilmDAO {
     List<Film> getAllFilms();
     Film getFilmById(int id);
     List<Film> getFilmsByName(String name);
-    List<Film> getFilmsByYear(short year);
-    List<Film> getFilmsByNameAndYear(String name, short year);
+    List<Film> getFilmsByYear(int year);
+    List<Film> getFilmsByNameAndYear(String name, int year);
 }

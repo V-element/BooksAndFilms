@@ -66,7 +66,7 @@ public class FilmDAOImpl implements FilmDAO{
     }
     
     @Override
-    public List<Film> getFilmsByYear(short year) {
+    public List<Film> getFilmsByYear(int year) {
         String sql = "SELECT * FROM schema_baf.films WHERE year = ?";
         return getListOfFilmsByParams(sql, new Object[]{year});
     }
@@ -78,7 +78,7 @@ public class FilmDAOImpl implements FilmDAO{
     }
 
     @Override
-    public List<Film> getFilmsByNameAndYear(String name, short year) {
+    public List<Film> getFilmsByNameAndYear(String name, int year) {
         String sql = "SELECT * FROM schema_baf.films WHERE name LIKE ? AND year = ?";
         return getListOfFilmsByParams(sql, new Object[]{name, year});
     }
@@ -93,7 +93,7 @@ public class FilmDAOImpl implements FilmDAO{
             film.setName((String)row.get("name"));
             film.setDescription((String)row.get("description"));
             film.setProducer((String)row.get("producer"));
-            film.setYear((short)row.get("year"));
+            film.setYear((int)row.get("year"));
             filmList.add(film);
         }
 
