@@ -11,9 +11,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 @PropertySource(value = "classpath:application.properties")
@@ -78,6 +76,7 @@ public class BookDAOImpl implements BookDAO{
         }
     }
 
+    @SuppressWarnings("unchecked")
     public List<Book> getAllBooks() {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.books";
@@ -100,6 +99,7 @@ public class BookDAOImpl implements BookDAO{
         }
     }
 
+    @SuppressWarnings("unchecked")
     public List<Book> getBooksByName(String name) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.books WHERE name LIKE ?";
@@ -110,6 +110,7 @@ public class BookDAOImpl implements BookDAO{
         }
     }
 
+    @SuppressWarnings("unchecked")
     public List<Book> getBooksByAuthor(String author) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.books WHERE author LIKE ?";
@@ -120,15 +121,14 @@ public class BookDAOImpl implements BookDAO{
         }
     }
 
+    @SuppressWarnings("unchecked")
     public List<Book> getBooksByNameAndAuthor(String name, String author) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.books WHERE name LIKE ? AND author LIKE ?";
             return getListOfBooksByParams(sql, new Object[]{name, author});
         } else {
-            String sql = "SELECT * FROM schema_baf.books WHERE name LIKE ? AND author LIKE ?";
-            return getListOfBooksByParams(sql, new Object[]{name, author});
-            /*Session session = sessionFactory.getCurrentSession();
-            return session.get(Book.class, name, author);*/
+            Session session = sessionFactory.getCurrentSession();
+            return (List<Book>) session.get(Book.class, new Object[]{name, author});
         }
     }
 
