@@ -9,11 +9,15 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.*;
 
 @Repository
+@Transactional
+@EnableTransactionManagement
 @PropertySource(value = "classpath:application.properties")
 public class BookDAOImpl implements BookDAO{
 
@@ -77,6 +81,7 @@ public class BookDAOImpl implements BookDAO{
     }
 
     @SuppressWarnings("unchecked")
+    @Transactional
     public List<Book> getAllBooks() {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.books";
