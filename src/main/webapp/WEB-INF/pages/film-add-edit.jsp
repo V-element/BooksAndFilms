@@ -20,12 +20,13 @@
     <c:url value="/films/edit" var="var"/>
 </c:if>
 <form action="${var}" method="POST">
+    <input type="hidden" name="id" value="${film.id}">
     <label for="name">Name</label>
-    <input type="text" name="name" id="name" value=${film.name}>
+    <input type="text" name="name" id="name" value="${film.name}">
     <label for="description">Description</label>
-    <input type="text" name="description" id="description" value=${film.description}>
+    <input type="text" name="description" id="description" value="${film.description}">
     <label for="producer">Producer</label>
-    <input type="text" name="producer" id="producer" value=${film.producer}>
+    <input type="text" name="producer" id="producer" value="${film.producer}">
     <label for="year">Year</label>
     <input type="text" name="year" id="year" value=${film.year}>
     <c:if test="${empty film.name}">

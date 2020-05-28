@@ -64,7 +64,7 @@ public class AppController {
     }
 
     @GetMapping("/books/search")
-    public String searchByParams(@RequestParam(value = "name") String name, @RequestParam(value = "author") String author, Model model) {
+    public String searchBooksByParams(@RequestParam(value = "name") String name, @RequestParam(value = "author") String author, Model model) {
         List<Book> bookList;
         if (name.isEmpty() & author.isEmpty()) {
             bookList = bookDAO.getAllBooks();
@@ -131,8 +131,9 @@ public class AppController {
     }
 
     @GetMapping("/films/search")
-    public String searchByParams(@RequestParam(value = "name") String name, @RequestParam(value = "year") int year, Model model) {
+    public String searchFilmsByParams(@RequestParam(value = "name") String name, @RequestParam(value = "year") String yearString, Model model) {
         List<Film> filmList;
+        int year = yearString.equals("") ? 0 : Integer.parseInt(yearString);
         if (name.isEmpty() & (year == 0)) {
             filmList = filmDAO.getAllFilms();
         } else if (!name.isEmpty() & year == 0) {
@@ -144,7 +145,7 @@ public class AppController {
         }
         model.addAttribute("title", "Films");
         model.addAttribute("name", name);
-        model.addAttribute("year", year);
+        model.addAttribute("year", yearString);
         model.addAttribute("films", filmList);
         model.addAttribute("filmsCount", filmList.size());
         return "films";
