@@ -4,6 +4,7 @@ import com.gnevanov.models.Book;
 import com.gnevanov.utilities.BookMapper;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
@@ -40,6 +41,7 @@ public class BookDAOImpl implements BookDAO{
         this.dataSource = dataSource;
     }
 
+    @Transactional
     public void add(Book book) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "INSERT INTO schema_baf.books(id,name,author,description) VALUES (?,?,?,?)";
@@ -54,6 +56,7 @@ public class BookDAOImpl implements BookDAO{
         }
     }
 
+    @Transactional
     public void update(Book book) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "UPDATE schema_baf.books SET name = ?, author = ?, description = ? WHERE id = ?";
@@ -69,6 +72,7 @@ public class BookDAOImpl implements BookDAO{
         }
     }
 
+    @Transactional
     public void delete(Book book) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "DELETE FROM schema_baf.books WHERE id = ?";
@@ -93,6 +97,7 @@ public class BookDAOImpl implements BookDAO{
         }
     }
 
+    @Transactional
     public Book getBookById(int id) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.books WHERE id = ?";
@@ -105,35 +110,45 @@ public class BookDAOImpl implements BookDAO{
     }
 
     @SuppressWarnings("unchecked")
+    @Transactional
     public List<Book> getBooksByName(String name) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.books WHERE name LIKE ?";
             return getListOfBooksByParams(sql, new Object[]{name});
         } else {
             Session session = sessionFactory.getCurrentSession();
-            return (List<Book>) session.get(Book.class, name);
+            Query query = session.createQuery("FROM Book WHERE name LIKE :name");
+            query.setParameter("name", name);
+            return (List<Book>) query.list();
         }
     }
 
     @SuppressWarnings("unchecked")
+    @Transactional
     public List<Book> getBooksByAuthor(String author) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.books WHERE author LIKE ?";
             return getListOfBooksByParams(sql, new Object[]{author});
         } else {
             Session session = sessionFactory.getCurrentSession();
-            return (List<Book>) session.get(Book.class, author);
+            Query query = session.createQuery("FROM Book WHERE author LIKE :author");
+            query.setParameter("author", author);
+            return (List<Book>) query.list();
         }
     }
 
     @SuppressWarnings("unchecked")
+    @Transactional
     public List<Book> getBooksByNameAndAuthor(String name, String author) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.books WHERE name LIKE ? AND author LIKE ?";
             return getListOfBooksByParams(sql, new Object[]{name, author});
         } else {
             Session session = sessionFactory.getCurrentSession();
-            return (List<Book>) session.get(Book.class, new Object[]{name, author});
+            Query query = session.createQuery("FROM Book WHERE name LIKE :name AND author LIKE :author");
+            query.setParameter("name", name);
+            query.setParameter("author", author);
+            return (List<Book>) query.list();
         }
     }
 

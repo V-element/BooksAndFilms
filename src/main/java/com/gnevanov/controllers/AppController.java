@@ -124,14 +124,16 @@ public class AppController {
 
     @GetMapping("/films/delete")
     public String deleteFilm(@RequestParam(value = "id") int id, Model model) {
-        filmDAO.delete(id);
+        Film film = new Film();
+        film.setId(id);
+        filmDAO.delete(film);
         return "redirect:/films";
     }
 
     @GetMapping("/films/search")
     public String searchByParams(@RequestParam(value = "name") String name, @RequestParam(value = "year") int year, Model model) {
         List<Film> filmList;
-        if (name.isEmpty() & year == 0) {
+        if (name.isEmpty() & (year == 0)) {
             filmList = filmDAO.getAllFilms();
         } else if (!name.isEmpty() & year == 0) {
             filmList = filmDAO.getFilmsByName("%" + name + "%");
