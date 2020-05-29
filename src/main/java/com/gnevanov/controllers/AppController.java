@@ -44,14 +44,14 @@ public class AppController {
     }
 
     @PostMapping("/books/add")
-    public String addBook(@RequestParam String name, @RequestParam String author, @RequestParam String description, Model model) {
+    public String addBook(@RequestParam String name, @RequestParam String author, @RequestParam String description) {
         Book book = new Book(name, author, description);
         bookService.add(book);
         return "redirect:/books";
     }
 
     @GetMapping(value = "/books/edit")
-    public ModelAndView editBook(@RequestParam("id") int id, Model model) {
+    public ModelAndView editBook(@RequestParam("id") int id) {
         ModelAndView modelAndView = new ModelAndView("book-add-edit");
         modelAndView.addObject(bookService.getBookById(id));
         return modelAndView;
@@ -64,7 +64,7 @@ public class AppController {
     }
 
     @GetMapping("/books/delete")
-    public String deleteBook(@RequestParam(value = "id") int id, Model model) {
+    public String deleteBook(@RequestParam(value = "id") int id) {
         Book book = new Book();
         book.setId(id);
         bookService.delete(book);
@@ -110,15 +110,14 @@ public class AppController {
     public String addFilm(@RequestParam String name,
                           @RequestParam String description,
                           @RequestParam String producer,
-                          @RequestParam int year,
-                          Model model) {
+                          @RequestParam int year) {
         Film film = new Film(name,description, producer, year);
         filmService.add(film);
         return "redirect:/films";
     }
 
     @GetMapping(value = "/films/edit")
-    public ModelAndView editFilm(@RequestParam("id") int id, Model model) {
+    public ModelAndView editFilm(@RequestParam("id") int id) {
         ModelAndView modelAndView = new ModelAndView("film-add-edit");
         modelAndView.addObject(filmService.getFilmById(id));
         return modelAndView;
@@ -131,7 +130,7 @@ public class AppController {
     }
 
     @GetMapping("/films/delete")
-    public String deleteFilm(@RequestParam(value = "id") int id, Model model) {
+    public String deleteFilm(@RequestParam(value = "id") int id) {
         Film film = new Film();
         film.setId(id);
         filmService.delete(film);

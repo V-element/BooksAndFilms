@@ -40,7 +40,7 @@ public class ScheduledTasks {
             Files.writeString(Paths.get("C:/temp/books.json"), objectMapper.writeValueAsString(bookList));
             Files.writeString(Paths.get("C:/temp/films.json"), objectMapper.writeValueAsString(filmList));
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
     }
 
@@ -52,21 +52,16 @@ public class ScheduledTasks {
         writeListToXML("films", filmList);
     }
 
-    private void writeListToXML(String fileName, List list) {
+    private void writeListToXML(String fileName, List<?> list) {
 
         XmlMapper xmlMapper = new XmlMapper();
         File xmlOutput = new File("C:/temp/" + fileName + ".xml");
         try (FileWriter fileWriter = new FileWriter(xmlOutput)) {
             for (Object object: list) {
-                if (fileName.equals("books")) {
-                    fileWriter.write(xmlMapper.writeValueAsString((Book) object));
-                } else {
-                    fileWriter.write(xmlMapper.writeValueAsString((Film) object));
-                }
-
+                fileWriter.write(xmlMapper.writeValueAsString(object));
             }
         } catch (IOException e) {
-
+            e.printStackTrace();
         }
     }
 }
