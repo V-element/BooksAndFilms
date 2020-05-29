@@ -1,10 +1,12 @@
-# BooksAndFilms
+# Books and films
 
-Веб-приложение, которое является каталогом книг и фильмов. <br>
-Хранение информации реализовать в 3х форматах: json, xml и база данных. <br>
-Интерфейс – это просто набор rest-сервисов. <br>
-Использовать Get-запрос для получения общего списка книг/фильмов, <br>
-post-запросы для поиска книг/фильмов по наименованию и/или автору и для добавления новых книг/фильмов.<br>
-Оперативное хранение данных в БД, и по расписанию синхронизация данных из БД с файлами json и xml. <br>
-Работу с БД реализовать 2мя способами: jdbc template и ORM, например, с возможностью переключения через файл свойств (properties).<br>
-Использовать Spring фраймворк.<br>
+<p>It's a web-application witch contains lists of books and films.</p>
+<p>Information keeps in 3 ways: DB, JSON, XML.</p>
+<p>REST service used in this application.</p>
+<p>Get requests used to obtain full list of books/films.</p>
+<p>Post request used to find book/film by name and/or author and for adding new book/film.</p>
+<p>Online storage of data in the DB, and scheduled synchronization of data from the database with json and xml files.</p>
+<p>There are 2 ways to work with the DB: JDBC template and ORM, can be switched in the properties file.</p>
+<p>Spring Framework used.</p>
+<br>
+<p>Made by Gnevanov Egor
