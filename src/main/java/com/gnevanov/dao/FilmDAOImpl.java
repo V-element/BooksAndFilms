@@ -1,6 +1,5 @@
 package com.gnevanov.dao;
 
-import com.gnevanov.models.Book;
 import com.gnevanov.models.Film;
 import com.gnevanov.utilities.FilmMapper;
 import org.hibernate.Session;
@@ -11,8 +10,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.ArrayList;
@@ -20,8 +17,6 @@ import java.util.List;
 import java.util.Map;
 
 @Repository
-@Transactional
-@EnableTransactionManagement
 @PropertySource(value = "classpath:application.properties")
 public class FilmDAOImpl implements FilmDAO {
 
@@ -44,7 +39,7 @@ public class FilmDAOImpl implements FilmDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    @Transactional
+    @Override
     public void add(Film film) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "INSERT INTO schema_baf.films(id,name,producer,description,year) VALUES (?,?,?,?,?)";
@@ -60,7 +55,7 @@ public class FilmDAOImpl implements FilmDAO {
         }
     }
 
-    @Transactional
+    @Override
     public void delete(Film film) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "DELETE FROM schema_baf.films WHERE id = ?";
@@ -72,7 +67,7 @@ public class FilmDAOImpl implements FilmDAO {
         }
     }
 
-    @Transactional
+    @Override
     public void update(Film film) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "UPDATE schema_baf.books SET name = ?, author = ?, description = ? WHERE id = ?";
@@ -89,7 +84,8 @@ public class FilmDAOImpl implements FilmDAO {
         }
     }
 
-    @Transactional
+    @Override
+    @SuppressWarnings("unchecked")
     public List<Film> getAllFilms() {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.films";
@@ -101,7 +97,7 @@ public class FilmDAOImpl implements FilmDAO {
         }
     }
 
-    @Transactional
+    @Override
     public Film getFilmById(int id) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.films WHERE id = ?";
@@ -113,8 +109,8 @@ public class FilmDAOImpl implements FilmDAO {
         }
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    @Transactional
     public List<Film> getFilmsByYear(int year) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.films WHERE year = ?";
@@ -127,8 +123,8 @@ public class FilmDAOImpl implements FilmDAO {
         }
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    @Transactional
     public List<Film> getFilmsByName(String name) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.films WHERE name LIKE ?";
@@ -141,8 +137,8 @@ public class FilmDAOImpl implements FilmDAO {
         }
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    @Transactional
     public List<Film> getFilmsByNameAndYear(String name, int year) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.films WHERE name LIKE ? AND year = ?";
@@ -160,7 +156,7 @@ public class FilmDAOImpl implements FilmDAO {
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         List<Film> filmList = new ArrayList<Film>();
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, paramsArray);
-        for (Map row : rows) {
+        for (Map<String, Object> row : rows) {
             Film film = new Film();
             film.setId((Integer) row.get("id"));
             film.setName((String) row.get("name"));

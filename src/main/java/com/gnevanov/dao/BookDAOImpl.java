@@ -10,15 +10,11 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.util.*;
 
 @Repository
-@Transactional
-@EnableTransactionManagement
 @PropertySource(value = "classpath:application.properties")
 public class BookDAOImpl implements BookDAO{
 
@@ -41,7 +37,7 @@ public class BookDAOImpl implements BookDAO{
         this.dataSource = dataSource;
     }
 
-    @Transactional
+    @Override
     public void add(Book book) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "INSERT INTO schema_baf.books(id,name,author,description) VALUES (?,?,?,?)";
@@ -56,7 +52,7 @@ public class BookDAOImpl implements BookDAO{
         }
     }
 
-    @Transactional
+    @Override
     public void update(Book book) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "UPDATE schema_baf.books SET name = ?, author = ?, description = ? WHERE id = ?";
@@ -72,7 +68,7 @@ public class BookDAOImpl implements BookDAO{
         }
     }
 
-    @Transactional
+    @Override
     public void delete(Book book) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "DELETE FROM schema_baf.books WHERE id = ?";
@@ -84,8 +80,8 @@ public class BookDAOImpl implements BookDAO{
         }
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    @Transactional
     public List<Book> getAllBooks() {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.books";
@@ -97,7 +93,7 @@ public class BookDAOImpl implements BookDAO{
         }
     }
 
-    @Transactional
+    @Override
     public Book getBookById(int id) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.books WHERE id = ?";
@@ -109,8 +105,8 @@ public class BookDAOImpl implements BookDAO{
         }
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    @Transactional
     public List<Book> getBooksByName(String name) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.books WHERE name LIKE ?";
@@ -123,8 +119,8 @@ public class BookDAOImpl implements BookDAO{
         }
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    @Transactional
     public List<Book> getBooksByAuthor(String author) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.books WHERE author LIKE ?";
@@ -137,8 +133,8 @@ public class BookDAOImpl implements BookDAO{
         }
     }
 
+    @Override
     @SuppressWarnings("unchecked")
-    @Transactional
     public List<Book> getBooksByNameAndAuthor(String name, String author) {
         if (Boolean.parseBoolean(environment.getProperty("db.useJdbcTemplate"))) {
             String sql = "SELECT * FROM schema_baf.books WHERE name LIKE ? AND author LIKE ?";
@@ -156,7 +152,7 @@ public class BookDAOImpl implements BookDAO{
         JdbcTemplate jdbcTemplate = new JdbcTemplate(dataSource);
         List<Book> bookList = new ArrayList<Book>();
         List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql, paramsArray);
-        for (Map row: rows) {
+        for (Map<String, Object> row: rows) {
             Book book = new Book();
             book.setId((Integer) row.get("id"));
             book.setName((String)row.get("name"));

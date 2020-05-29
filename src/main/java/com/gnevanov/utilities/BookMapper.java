@@ -8,6 +8,7 @@ import java.sql.SQLException;
 
 public class BookMapper implements RowMapper {
 
+    @Override
     public Object mapRow(ResultSet resultSet, int i) throws SQLException {
         Book book = new Book();
         book.setId(resultSet.getInt("ID"));
